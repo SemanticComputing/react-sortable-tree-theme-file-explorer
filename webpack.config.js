@@ -8,7 +8,7 @@ const target = process.env.TARGET || 'umd';
 
 const styleLoader = {
   loader: 'style-loader',
-  options: { insertAt: 'top' },
+  // options: { insertAt: 'top' },
 };
 
 const fileLoader = {
@@ -19,19 +19,28 @@ const fileLoader = {
 const postcssLoader = {
   loader: 'postcss-loader',
   options: {
-    plugins: () => [
-      autoprefixer({ browsers: ['IE >= 9', 'last 2 versions', '> 1%'] }),
-    ],
-  },
+    postcssOptions: {
+      plugins: [
+        [
+          "autoprefixer",
+          {
+            // Options
+          },
+        ],
+      ],
+    }
+  }
 };
 
 const cssLoader = isLocal => ({
   loader: 'css-loader',
   options: {
-    modules: true,
-    '-autoprefixer': true,
-    importLoaders: true,
-    localIdentName: isLocal ? 'rstcustom__[local]' : null,
+    modules: {
+      mode: 'local',
+      localIdentName: isLocal ? 'rstcustom__[local]' : '[hash:base64]',
+      // localIdentName: 'rstcustom__[local]',
+    },
+    importLoaders: 2,
   },
 });
 
@@ -46,15 +55,6 @@ const config = {
   devtool: 'source-map',
   plugins: [
     new webpack.EnvironmentPlugin({ NODE_ENV: 'development' }),
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-      },
-      mangle: false,
-      beautify: true,
-      comments: true,
-    }),
   ],
   module: {
     rules: [
@@ -108,9 +108,8 @@ switch (target) {
       new webpack.NoEmitOnErrorsPlugin(),
     ];
     config.devServer = {
-      contentBase: path.join(__dirname, 'build'),
-      port: process.env.PORT || 3001,
-      stats: 'minimal',
+      static: path.join(__dirname, 'build'),
+      port: process.env.PORT || 3001
     };
 
     break;
