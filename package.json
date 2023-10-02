@@ -47,7 +47,7 @@
   "peerDependencies": {
     "react": "^15.3.0 || ^16.0.0 || ^17.0.0",
     "react-dom": "^15.3.0 || ^16.0.0 || ^17.0.0",
-    "@nosferatu500/react-sortable-tree": "^3.0.5"
+    "@nosferatu500/react-sortable-tree": "^4.4.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.6",
